@@ -36,7 +36,7 @@ The LLM Evaluation Chatbot is a web application that interacts with a language m
 3. Start the backend server:
    ```bash
    npx ts-node server.ts
-
+g
 4. Navigate to the frontend directory and install dependencies:
    ```bash
    cd ../frontend
@@ -52,3 +52,16 @@ The LLM Evaluation Chatbot is a web application that interacts with a language m
 - Enter a prompt in the input field and click Submit Prompt.
 - The chatbot will display the generated response below the input field.
 - Rate the response using the rating input and click Submit Rating.
+
+## NOTICES!!!
+- Switch to a Better Model: If you need better answers, try using a different model like 
+   ```bash
+   bert-base-uncased 
+or 
+   ```bash
+   distilgpt2.
+- For Example:
+   ```bash
+   HF_API_URL=https://api-inference.huggingface.co/models/gpt2
+
+- Feel free to upgrade to higher models like OPENAI if willing to pay Financial services.
