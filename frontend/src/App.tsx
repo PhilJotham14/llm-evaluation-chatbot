@@ -1,187 +1,76 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import axios from 'axios';
+import SuccessRateChart from './components/SuccessRateChart';
+import './App.css';
 
-const App = () => {
+function App() {
   const [prompt, setPrompt] = useState('');
   const [response, setResponse] = useState('');
-  const [rating, setRating] = useState<number | ''>('');
   const [loading, setLoading] = useState(false);
-  const [ratingLoading, setRatingLoading] = useState(false);
+  const [successCount, setSuccessCount] = useState(0);
+  const [failureCount, setFailureCount] = useState(0);
 
   const handlePromptSubmit = async () => {
-    if (!prompt.trim()) {
-      alert('Please enter a valid prompt.');
-      return;
-    }
-
     setLoading(true);
+    setResponse("");  // Clear previous response
+
     try {
       const res = await axios.post('http://localhost:4000/api/prompt', { prompt });
-      setResponse(res.data.response || 'No response received');
-      console.log('Response received:', res.data);
-    } catch (error: unknown) {
-      console.error(
-        'Error fetching response:',
-        error instanceof Error ? error.message : error
-      );
-      setResponse('Error: Unable to fetch response');
+      const generatedResponse = res.data.response; // Extract the response from the backend
+      setResponse(generatedResponse);
+
+      // Update success count
+      setSuccessCount(successCount + 1);
+    } catch (error) {
+      console.error('Error submitting prompt:', error);
+      setResponse("Request failed.");
+      setFailureCount(failureCount + 1);  // Increment failure count
     } finally {
       setLoading(false);
     }
   };
 
-  const handleRatingSubmit = async () => {
-    if (typeof rating !== 'number' || rating < 1 || rating > 5) {
-      alert('Please enter a valid rating between 1 and 5.');
-      return;
-    }
-
-    setRatingLoading(true);
-    try {
-      await axios.post('http://localhost:4000/api/rate', { id: 1, rating });
-      alert('Rating submitted');
-    } catch (error: unknown) {
-      console.error(
-        'Error submitting rating:',
-        error instanceof Error ? error.message : error
-      );
-      alert('Error: Unable to submit rating');
-    } finally {
-      setRatingLoading(false);
-    }
-  };
-
   return (
-    <div style={{ padding: '20px', fontFamily: 'Arial, sans-serif' }}>
-      <h1>LLM Evaluation Chatbot</h1>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 p-4">
+      {/* Header */}
+      <h1 className="text-4xl font-bold text-center text-gray-800 mt-8 mb-4">
+        LLM Evaluation Chatbot
+      </h1>
 
+      {/* Prompt Input */}
       <input
         type="text"
         value={prompt}
         onChange={(e) => setPrompt(e.target.value)}
         placeholder="Enter your prompt"
-        style={{ marginRight: '10px', width: '300px' }}
+        className="w-full max-w-md p-3 mt-4 rounded-lg border-2 border-gray-300 focus:outline-none focus:ring-2 focus:ring-blue-500 transition-all"
       />
-      <button onClick={handlePromptSubmit} disabled={loading}>
+
+      {/* Submit Button */}
+      <button
+        onClick={handlePromptSubmit}
+        disabled={loading}
+        className="w-full max-w-md py-3 mt-4 bg-blue-600 text-white font-semibold rounded-lg hover:bg-blue-700 transition-colors disabled:bg-gray-400"
+      >
         {loading ? 'Loading...' : 'Submit Prompt'}
       </button>
 
+      {/* Response */}
       {response && (
-        <div style={{ marginTop: '20px' }}>
-          <h2>Response:</h2>
-          <p>{response}</p>
+        <div className="mt-8 p-4 bg-gray-100 rounded-lg shadow-lg max-w-3xl mx-auto">
+          <h2 className="text-2xl font-semibold text-gray-800">Response:</h2>
+          <p className="text-gray-600">{response}</p>
         </div>
       )}
 
-      <div style={{ marginTop: '20px' }}>
-        <h2>Rate the Response</h2>
-        <input
-          type="number"
-          value={rating}
-          onChange={(e) => setRating(Number(e.target.value))}
-          placeholder="Enter rating (1-5)"
-          style={{ marginRight: '10px', width: '50px' }}
-        />
-        <button onClick={handleRatingSubmit} disabled={ratingLoading}>
-          {ratingLoading ? 'Submitting...' : 'Submit Rating'}
-        </button>
-      </div>
+      {/* Success Rate Chart (positioned top-right) */}
+      <SuccessRateChart
+        successCount={successCount}
+        failureCount={failureCount}
+        className="absolute top-8 right-8 w-1/3 max-w-sm"
+      />
     </div>
   );
-};
+}
 
 export default App;
-
-
-
-// import React, { useState } from 'react';
-// import axios from 'axios';
-
-// const App = () => {
-//   const [prompt, setPrompt] = useState('');
-//   const [response, setResponse] = useState('');
-//   const [rating, setRating] = useState<number | ''>('');
-//   const [loading, setLoading] = useState(false);
-//   const [ratingLoading, setRatingLoading] = useState(false);
-
-//   const handlePromptSubmit = async () => {
-//     if (!prompt) {
-//       alert('Please enter a prompt.');
-//       return;
-//     }
-
-//     setLoading(true);
-//     try {
-//       const res = await axios.post('http://localhost:4000/api/prompt', { prompt });
-//       setResponse(res.data.response || 'No response received');
-//       console.log('Response received:', res.data);
-//     } catch (error: unknown) {
-//       console.error(
-//         'Error fetching response:',
-//         error instanceof Error ? error.message : error
-//       );
-//       setResponse('Error: Unable to fetch response');
-//     } finally {
-//       setLoading(false);
-//     }
-//   };
-
-//   const handleRatingSubmit = async () => {
-//     if (typeof rating !== 'number' || rating < 1 || rating > 5) {
-//       alert('Please enter a valid rating between 1 and 5.');
-//       return;
-//     }
-
-//     setRatingLoading(true);
-//     try {
-//       const res = await axios.post('http://localhost:4000/api/rate', { id: 1, rating });
-//       alert('Rating submitted');
-//       console.log('Rating response:', res.data);
-//     } catch (error: unknown) {
-//       console.error(
-//         'Error submitting rating:',
-//         error instanceof Error ? error.message : error
-//       );
-//     } finally {
-//       setRatingLoading(false);
-//     }
-//   };
-
-//   return (
-//     <div>
-//       <h1>LLM Evaluation Chatbot</h1>
-
-//       <input
-//         type="text"
-//         value={prompt}
-//         onChange={(e) => setPrompt(e.target.value)}
-//         placeholder="Enter your prompt"
-//       />
-//       <button onClick={handlePromptSubmit} disabled={loading}>
-//         {loading ? 'Loading...' : 'Submit Prompt'}
-//       </button>
-
-//       {response && (
-//         <div>
-//           <h2>Response:</h2>
-//           <p>{response}</p>
-//         </div>
-//       )}
-
-//       <div>
-//         <h2>Rate the Response</h2>
-//         <input
-//           type="number"
-//           value={rating}
-//           onChange={(e) => setRating(Number(e.target.value))}
-//           placeholder="Enter rating (1-5)"
-//         />
-//         <button onClick={handleRatingSubmit} disabled={ratingLoading}>
-//           {ratingLoading ? 'Submitting...' : 'Submit Rating'}
-//         </button>
-//       </div>
-//     </div>
-//   );
-// };
-
-// export default App;
