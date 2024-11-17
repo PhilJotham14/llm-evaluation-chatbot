@@ -8,7 +8,6 @@ The **LLM Evaluation Chatbot** is a web application that enables users to intera
 
 - **Prompt Submission**: Users can input queries and receive generated responses from the Hugging Face API.
 - **Response Display**: The chatbot presents the generated output in an intuitive interface.
-- **Response Rating**: Users can rate the quality of responses on a scale from 1 to 5.
 - **Loading Indicator**: Displays a loading spinner while the API processes requests.
 - **Data Visualization**: Ratings and interaction metrics are visualized using charts powered by Chart.js.
 
@@ -36,69 +35,70 @@ The **LLM Evaluation Chatbot** is a web application that enables users to intera
 ### Clone the Repository:
 ```bash
 git clone https://github.com/PhilJotham14/llm-evaluation-chatbot.git
+```
+
+```bash
 cd llm-evaluation-chatbot
+```
+
 Backend Setup:
 Navigate to the backend directory:
-
-bash
-Copy code
+```bash
 cd backend
+```
 Install dependencies:
-
-bash
-Copy code
+```bash
 npm install
-Start the backend server:
+```
 
-bash
-Copy code
+Start the backend server:
+```bash
 npx ts-node server.ts
+```
+
 Frontend Setup:
 Navigate to the frontend directory:
-
-bash
-Copy code
+```bash
 cd ../frontend
+```
 Install dependencies:
-
-bash
-Copy code
+```bash
 npm install
+```
+
 Start the frontend application:
-
-bash
-Copy code
+```bash
 npm start
+```
 Open the Application:
-Access the application in your browser at http://localhost:3000.
 
-Usage
+Access the application in your browser at ``` http://localhost:3000. ```
+
+### Usage
 Prompt Submission:
-Enter a prompt in the input field and click Submit Prompt.
-The chatbot will display a generated response below the input field.
-Rating Responses:
-Rate the response using the rating input and click Submit Rating.
+- Enter a prompt in the input field and click Submit Prompt.
+- The chatbot will display a generated response below the input field.
+
 View Charts:
-Navigate to the dashboard to view interactive charts representing rating trends and statistics.
+- Navigate to the dashboard to view interactive charts representing rating trends and statistics.
+
 Notices
 Model Switching: Use alternative models for better responses, such as:
 
-bash
-Copy code
+```bash
 bert-base-uncased
+```
 or:
-
-bash
-Copy code
+```bash
 distilgpt2
+```
 Example API URL:
-
-bash
-Copy code
+```bash
 HF_API_URL=https://api-inference.huggingface.co/models/gpt2
-Upgrades: For superior performance, consider using advanced models like OpenAI's GPT-4 (requires a subscription).
+```
+- Upgrades: For superior performance, consider using advanced models like OpenAI's GPT-4 (requires a subscription).
 
-Key Updates:
-Chart.js Integration: Added a dedicated section under "Frontend" for technologies and updated "Features" to include data visualization.
-Improved Structure: Clarified installation instructions for easier navigation and setup.
-Enhanced Notices Section: Highlighted the ability to switch models and the benefits of upgrading to paid solutions for better performance.
+### Key Updates:
+- Chart.js Integration: Added a dedicated section under "Frontend" for technologies and updated "Features" to include data visualization.
+- Improved Structure: Clarified installation instructions for easier navigation and setup.
+- Enhanced Notices Section: Highlighted the ability to switch models and the benefits of upgrading to paid solutions for better performance.
